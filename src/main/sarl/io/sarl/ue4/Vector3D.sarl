@@ -1,0 +1,22 @@
+/** 
+ * 
+ */
+package io.sarl.ue4
+
+/** 
+ * Immutable 3D vector
+ * @author Alexandre Lombard
+ * 
+ */
+class Vector3D extends Object {
+	
+	public val x: Double
+	public val y: Double
+	public val z: Double
+	
+	new (x: Double, y: Double, z: Double) {
+		this.x = x
+		this.y = y
+		this.z = z
+	}
+}

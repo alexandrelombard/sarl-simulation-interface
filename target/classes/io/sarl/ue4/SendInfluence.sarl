@@ -1,0 +1,15 @@
+/** 
+ * 
+ */
+package io.sarl.ue4
+
+/** 
+ * Capacity to send influences to the world
+ * @author Alexandre Lombard
+ * 
+ */
+capacity SendInfluence {
+	
+	def send(influence: Influence)
+	
+}

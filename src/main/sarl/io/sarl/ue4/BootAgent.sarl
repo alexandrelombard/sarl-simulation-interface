@@ -1,0 +1,20 @@
+/** 
+ * 
+ */
+package io.sarl.ue4
+
+import io.sarl.core.Initialize
+import io.sarl.core.Logging
+
+/** 
+ * Starts all agents able to influence the world
+ * @author Alexandre Lombard
+ * 
+ */
+agent BootAgent {
+	uses Logging
+
+	on Initialize {
+		info("The agent was started.")
+	}
+}
