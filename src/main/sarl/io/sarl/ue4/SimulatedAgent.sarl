@@ -4,7 +4,9 @@
 package io.sarl.ue4
 
 import io.sarl.core.Initialize
-import io.sarl.core.Logging
+import io.sarl.ue4.events.SimulationStep
+import io.sarl.ue4.influence.SendInfluence
+import io.sarl.ue4.influence.UdpSendInfluence
 
 /** 
  * Agent able to send influences on the world
@@ -12,9 +14,23 @@ import io.sarl.core.Logging
  * 
  */
 agent SimulatedAgent {
-	uses Logging, SendInfluence
+	uses SendInfluence
+
+	val initialScale = 1.0
+	var direction = new Vector3D(initialScale * Math.random, initialScale * Math.random, initialScale * Math.random)
 
 	on Initialize {
 		setSkill(new UdpSendInfluence, SendInfluence)
 	}
+	
+	on SimulationStep {
+		synchronized (direction) {
+			// Slightly update the direction
+			direction = direction + new Vector3D(Math.random, Math.random, Math.random)
+		
+			// Send the influence
+			sendInfluence(direction)
+		}
+	}	
 }
+ 

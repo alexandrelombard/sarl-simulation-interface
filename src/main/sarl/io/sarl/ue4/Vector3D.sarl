@@ -19,4 +19,32 @@ class Vector3D extends Object {
 		this.y = y
 		this.z = z
 	}
+
+	def distance(v : Vector3D) {
+		return Math.sqrt(distanceSquared(v))
+	}
+
+	def distanceSquared(v : Vector3D) {
+		return Math.pow(this.x - v.x, 2d) + Math.pow(this.y - v.y, 2d) + Math.pow(this.z - v.z, 2)
+	}
+
+	def operator_plus(v1 : Vector3D) {
+		return new Vector3D(v1.x + this.x, v1.y + this.y, v1.z + this.z)
+	}
+
+	def operator_minus(v1 : Vector3D) {
+		return new Vector3D(this.x - v1.x, this.y - v1.y, this.z - v1.z)
+	}
+
+	def operator_multiply(l : Double) : Vector3D {
+		return new Vector3D(this.x * l, this.y * l, this.z * l)
+	}
+
+	def operator_divide(l : Double) : Vector3D {
+		return new Vector3D(this.x / l, this.y / l, this.z / l)
+	}
+
+	def length() : double {
+		return this.x * this.x + this.y * this.y + this.z * this.z
+	}
 }

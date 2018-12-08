@@ -1,0 +1,48 @@
+/** 
+ * 
+ */
+package io.sarl.ue4.influence
+
+import io.sarl.ue4.Vector3D
+import java.net.InetAddress
+import java.net.Socket
+
+/** 
+ * Allows sending influences through TCP protocol.
+ * @author Alexandre Lombard
+ * 
+ */
+skill TcpSendInfluence implements SendInfluence {
+	
+	/** The IP address (currently hard-coded) */
+	val ipAddress = InetAddress.getByName("127.0.0.1")
+	
+	/** The TCP port (currently hard-coded) */
+	val port = 4242
+	
+	var socket: Socket
+
+	def install {
+		synchronized (this) {
+			this.socket = new Socket(ipAddress, port)			
+		}
+	}
+
+	def uninstall {
+		synchronized (this) {
+			this.socket.close
+		}
+	}
+	
+	def sendInfluence(force : Vector3D) {
+		// Serialization
+		val influence = new Influence(force, ID)
+		val buffer = influence.toByteArray
+		
+		// Sending packet
+		synchronized (this) {
+			this.socket.outputStream.write(buffer)
+		}
+	}
+	
+}

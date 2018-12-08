@@ -1,0 +1,45 @@
+/** 
+ * 
+ */
+package io.sarl.ue4.influence
+
+import java.net.InetAddress
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import io.sarl.ue4.Vector3D
+
+/** 
+ * Allows sending influences through UDP protocol.
+ * @author Alexandre Lombard
+ * 
+ */
+skill UdpSendInfluence implements SendInfluence {
+	/** The IP address (currently hard-coded) */
+	val ipAddress = InetAddress.getByName("127.0.0.1")
+	
+	/** The UDP port (currently hard-coded) */
+	val port = 4242
+
+	def install {
+		//
+	}
+
+	def uninstall {
+		//
+	}
+	
+	def sendInfluence(force : Vector3D) {
+		// Serialization
+		val influence = new Influence(force, ID)
+		val buffer = influence.toByteArray
+		
+		// Sending packet
+		val packet = new DatagramPacket(buffer, buffer.length, ipAddress, port)
+		val socket = new DatagramSocket()
+		
+		socket.send(packet)
+		
+		socket.close
+	}
+	
+}

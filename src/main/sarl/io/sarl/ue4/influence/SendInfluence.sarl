@@ -1,7 +1,9 @@
 /** 
  * 
  */
-package io.sarl.ue4
+package io.sarl.ue4.influence
+
+import io.sarl.ue4.Vector3D
 
 /** 
  * Capacity to send influences to the world
@@ -10,6 +12,6 @@ package io.sarl.ue4
  */
 capacity SendInfluence {
 	
-	def send(influence: Influence)
+	def sendInfluence(force : Vector3D)
 	
 }

@@ -5,6 +5,10 @@ package io.sarl.ue4
 
 import io.sarl.core.Initialize
 import io.sarl.core.Logging
+import io.sarl.core.Lifecycle
+import io.sarl.core.Schedules
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.ue4.events.SimulationStep
 
 /** 
  * Starts all agents able to influence the world
@@ -12,9 +16,28 @@ import io.sarl.core.Logging
  * 
  */
 agent BootAgent {
-	uses Logging
+	uses Logging, Lifecycle, DefaultContextInteractions, Schedules
 
 	on Initialize {
-		info("The agent was started.")
+		// Parameters
+		var agentsCount = 100
+		
+		// Reading parameters
+		if (occurrence.parameters.length > 0) {
+			val countParameter = (occurrence.parameters.get(0))
+			agentsCount = Integer.parseInt(countParameter.toString)
+		}
+		
+		// Spawning the agents
+		info("Spawning simulated agents (" + agentsCount + ")...")
+		
+		for (var idx = 0; idx < agentsCount; idx++) {
+			spawn(SimulatedAgent)			
+		}
+		
+		// Starting simulation
+		info("Starting simulation...")
+		
+		every(100) [ emit(new SimulationStep()) ]
 	}
 }
