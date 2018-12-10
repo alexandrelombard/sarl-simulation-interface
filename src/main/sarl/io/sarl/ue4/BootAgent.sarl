@@ -9,6 +9,7 @@ import io.sarl.core.Lifecycle
 import io.sarl.core.Schedules
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.ue4.events.SimulationStep
+import io.sarl.ue4.perception.PerceptionsDispatcher
 
 /** 
  * Starts all agents able to influence the world
@@ -20,7 +21,7 @@ agent BootAgent {
 
 	on Initialize {
 		// Parameters
-		var agentsCount = 100
+		var agentsCount = 1
 		
 		// Reading parameters
 		if (occurrence.parameters.length > 0) {
@@ -28,7 +29,11 @@ agent BootAgent {
 			agentsCount = Integer.parseInt(countParameter.toString)
 		}
 		
-		// Spawning the agents
+		// Spawning the perception dispatcher
+		info("Spawning the perception dispacter...")
+		spawn(PerceptionsDispatcher)
+		
+		// Spawning the agents with bodies
 		info("Spawning simulated agents (" + agentsCount + ")...")
 		
 		for (var idx = 0; idx < agentsCount; idx++) {

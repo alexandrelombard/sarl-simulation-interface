@@ -7,6 +7,8 @@ import io.sarl.core.Initialize
 import io.sarl.ue4.events.SimulationStep
 import io.sarl.ue4.influence.SendInfluence
 import io.sarl.ue4.influence.UdpSendInfluence
+import io.sarl.ue4.perception.PerceptionsReceived
+import io.sarl.core.Logging
 
 /** 
  * Agent able to send influences on the world
@@ -14,10 +16,10 @@ import io.sarl.ue4.influence.UdpSendInfluence
  * 
  */
 agent SimulatedAgent {
-	uses SendInfluence
+	uses Logging, SendInfluence
 
-	val initialScale = 1.0
-	var direction = new Vector3D(initialScale * Math.random, initialScale * Math.random, initialScale * Math.random)
+	val initialScale = 5.0
+	var direction = new Vector3D(initialScale * Math.random(), initialScale * Math.random(), initialScale * Math.random())
 
 	on Initialize {
 		setSkill(new UdpSendInfluence, SendInfluence)
@@ -26,11 +28,15 @@ agent SimulatedAgent {
 	on SimulationStep {
 		synchronized (direction) {
 			// Slightly update the direction
-			direction = direction + new Vector3D(Math.random, Math.random, Math.random)
+			direction = direction + new Vector3D(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1)
 		
 			// Send the influence
 			sendInfluence(direction)
 		}
-	}	
+	}
+	
+	on PerceptionsReceived {
+		info("I'm seeing the world")
+	}
 }
  

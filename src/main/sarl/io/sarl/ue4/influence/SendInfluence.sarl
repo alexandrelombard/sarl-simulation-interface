@@ -4,13 +4,14 @@
 package io.sarl.ue4.influence
 
 import io.sarl.ue4.Vector3D
+import io.sarl.lang.core.Capacity
 
 /** 
  * Capacity to send influences to the world
  * @author Alexandre Lombard
  * 
  */
-capacity SendInfluence {
+capacity SendInfluence extends Capacity {
 	
 	def sendInfluence(force : Vector3D)
 	
