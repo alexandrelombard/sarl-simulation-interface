@@ -21,7 +21,8 @@ agent BootAgent {
 
 	on Initialize {
 		// Parameters
-		var agentsCount = 500
+		var agentsCount = 100
+		val simulationPeriod = 200
 		
 		// Reading parameters
 		if (occurrence.parameters.length > 0) {
@@ -30,7 +31,7 @@ agent BootAgent {
 		}
 		
 		// Spawning the perception dispatcher
-		info("Spawning the perception dispacter...")
+		info("Spawning the perception dispatcher...")
 		spawn(PerceptionsDispatcher)
 		
 		// Spawning the agents with bodies
@@ -43,6 +44,6 @@ agent BootAgent {
 		// Starting simulation
 		info("Starting simulation...")
 		
-		every(100) [ emit(new SimulationStep()) ]
+		every(simulationPeriod)[emit(new SimulationStep())]
 	}
 }

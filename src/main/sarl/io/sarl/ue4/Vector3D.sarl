@@ -14,6 +14,10 @@ class Vector3D extends Object {
 	public val y: Double
 	public val z: Double
 	
+	new() {
+		this(0.0, 0.0, 0.0)
+	}
+	
 	new (x: Double, y: Double, z: Double) {
 		this.x = x
 		this.y = y

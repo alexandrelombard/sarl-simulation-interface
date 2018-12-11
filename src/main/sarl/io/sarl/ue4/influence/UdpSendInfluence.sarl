@@ -3,11 +3,10 @@
  */
 package io.sarl.ue4.influence
 
-import java.net.InetAddress
+import io.sarl.ue4.Vector3D
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import io.sarl.ue4.Vector3D
-import io.sarl.core.Logging
+import java.net.InetAddress
 
 /** 
  * Allows sending influences through UDP protocol.
