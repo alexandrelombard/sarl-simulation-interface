@@ -5,6 +5,7 @@ package io.sarl.ue4.perception
 
 import io.sarl.core.Initialize
 import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Logging
 
 /** 
  * Receives the perceptions from UE4 and emit perception events to the agents
@@ -12,7 +13,7 @@ import io.sarl.core.DefaultContextInteractions
  * 
  */
 agent PerceptionsDispatcher {
-	uses ReceivePerceptions, DefaultContextInteractions
+	uses ReceivePerceptions, DefaultContextInteractions, Logging
 
 	on Initialize {
 		setSkill(new UdpReceivePerceptions, ReceivePerceptions)
@@ -20,7 +21,7 @@ agent PerceptionsDispatcher {
 		onPerceptionsReceived = [ dispatchPerceptions(it) ]
 	}
 	
-	def dispatchPerceptions(p: PerceptionList) : void {
+	def dispatchPerceptions(p: PerceptionList) : void {		
 		new PerceptionsReceived(p).emit [it.UUID == p.id]
 	}
 

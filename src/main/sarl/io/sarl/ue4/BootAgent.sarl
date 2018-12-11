@@ -21,7 +21,7 @@ agent BootAgent {
 
 	on Initialize {
 		// Parameters
-		var agentsCount = 1
+		var agentsCount = 500
 		
 		// Reading parameters
 		if (occurrence.parameters.length > 0) {

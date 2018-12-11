@@ -12,7 +12,5 @@ import io.sarl.lang.core.Capacity
  * 
  */
 capacity SendInfluence extends Capacity {
-	
 	def sendInfluence(force : Vector3D)
-	
 }

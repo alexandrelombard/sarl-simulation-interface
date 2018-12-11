@@ -8,6 +8,7 @@ import java.net.DatagramPacket
 import io.sarl.core.Schedules
 import io.sarl.core.AgentTask
 import io.sarl.lang.core.Skill
+import io.sarl.core.Logging
 
 /** 
  * Allows an agent to receive the perceptions sent by UE4.

@@ -47,4 +47,8 @@ class Vector3D extends Object {
 	def length() : double {
 		return this.x * this.x + this.y * this.y + this.z * this.z
 	}
+	
+	override toString() : String {
+		"[" + x + ", " + y + ", " + z + "]"
+	}
 }

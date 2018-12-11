@@ -23,10 +23,11 @@ class Influence extends Object {
 	/** Custom serialization */
 	def toByteArray() {
 		val idStr = id.toString
-		val byteBuffer = ByteBuffer.allocate(4 + idStr.length + 3 * 8)
+		val byteBuffer = ByteBuffer.allocate(4 + idStr.length + 1 + 3 * 8)
 
-		byteBuffer.putInt(idStr.length)
+		byteBuffer.putInt(idStr.length + 1)
 		byteBuffer.put(idStr.bytes)
+		byteBuffer.put(0 as byte)
 
 		byteBuffer.putFloat(influence.x.floatValue)
 		byteBuffer.putFloat(influence.y.floatValue)

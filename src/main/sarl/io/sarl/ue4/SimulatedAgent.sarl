@@ -18,7 +18,7 @@ import io.sarl.core.Logging
 agent SimulatedAgent {
 	uses Logging, SendInfluence
 
-	val initialScale = 5.0
+	val initialScale = 100.0
 	var direction = new Vector3D(initialScale * Math.random(), initialScale * Math.random(), initialScale * Math.random())
 
 	on Initialize {
@@ -28,7 +28,7 @@ agent SimulatedAgent {
 	on SimulationStep {
 		synchronized (direction) {
 			// Slightly update the direction
-			direction = direction + new Vector3D(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1)
+			//direction = direction + new Vector3D(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1)
 		
 			// Send the influence
 			sendInfluence(direction)
@@ -36,7 +36,25 @@ agent SimulatedAgent {
 	}
 	
 	on PerceptionsReceived {
-		info("I'm seeing the world")
+		if (occurrence.perceptionList.perceptions.size > 0) {
+			var to = new Vector3D(0.0, 0.0, 0.0)
+
+			// Average position
+			for (v : occurrence.perceptionList.perceptions)
+				to = to + v
+			to = to * (1.0 / occurrence.perceptionList.perceptions.size)
+			
+			to = to / to.length // Normalize
+			
+			to = to * -1.0		// Invert
+			to = to * 10000.0		// Scale
+
+			synchronized (this) {
+				this.direction = to
+			}
+
+			info("New direction: " + to)	
+		}
 	}
 }
  
