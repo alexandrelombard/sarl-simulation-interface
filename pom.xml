@@ -11,6 +11,7 @@
 		<sarl.version>0.8.6</sarl.version>
 		<compiler.level>1.8</compiler.level>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<proto.version>3.6.1</proto.version>
 	</properties>
 
 	<dependencies>
@@ -23,7 +24,7 @@
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>3.6.1</version>
+			<version>${proto.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -69,7 +70,7 @@
 							<goal>compile-cpp</goal>
 						</goals>
 						<configuration>
-							<protocArtifact>com.google.protobuf:protoc:3.4.0:exe:${os.detected.classifier}</protocArtifact>
+							<protocArtifact>com.google.protobuf:protoc:${proto.version}:exe:${os.detected.classifier}</protocArtifact>
 						</configuration>
 					</execution>
 				</executions>
