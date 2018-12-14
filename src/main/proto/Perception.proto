@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package io.sarl.ue4;
+
+option java_package = "io.sarl.ue4.perception";
+option java_outer_classname = "PerceptionProtos";
+
+import "Vector3D.proto";
+import "Quaternion.proto";
+
+message Perception {
+  optional string identifier = 1;
+  optional Vector3D position = 2;
+  optional Vector3D velocity = 3;
+  optional Quaternion rotation = 4;
+}

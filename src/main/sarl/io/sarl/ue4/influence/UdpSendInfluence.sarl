@@ -30,7 +30,7 @@ skill UdpSendInfluence implements SendInfluence {
 	
 	def sendInfluence(force : Vector3D) {
 		// Serialization
-		val influence = new Influence(force, ID)
+		val influence = new Influence(ID, force, 0.0)
 		val buffer = influence.toByteArray
 		
 		// Sending packet

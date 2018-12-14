@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package io.sarl.ue4;
+
+option java_package = "io.sarl.ue4.utils";
+option java_outer_classname = "QuaternionProtos";
+
+message Quaternion {
+  required float w = 1;
+  required float x = 2;
+  required float y = 3;
+  required float z = 4;
+}

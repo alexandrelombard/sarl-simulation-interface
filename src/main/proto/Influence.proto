@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package io.sarl.ue4;
+
+option java_package = "io.sarl.ue4.influence";
+option java_outer_classname = "InfluenceProtos";
+
+import "Vector3D.proto";
+
+message Influence {
+  required string id = 1;
+  optional Vector3D influence = 2;
+  optional float duration = 3;
+}

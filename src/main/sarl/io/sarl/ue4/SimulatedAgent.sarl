@@ -44,7 +44,7 @@ agent SimulatedAgent {
 			
 			to = to / to.length // Normalize
 			
-			to = to * -1.0		// Invert
+			//to = to * -1.0		// Invert
 			to = to * 10000.0		// Scale
 
 //			synchronized (this) {
@@ -55,5 +55,5 @@ agent SimulatedAgent {
 			info("New direction: " + to)	
 		}
 	}
+	
 }
- 

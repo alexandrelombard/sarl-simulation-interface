@@ -21,7 +21,7 @@ agent BootAgent {
 
 	on Initialize {
 		// Parameters
-		var agentsCount = 100
+		var agentsCount = 500
 		val simulationPeriod = 200
 		
 		// Reading parameters
@@ -38,7 +38,7 @@ agent BootAgent {
 		info("Spawning simulated agents (" + agentsCount + ")...")
 		
 		for (var idx = 0; idx < agentsCount; idx++) {
-			spawn(SimulatedAgent)			
+			spawn(SimulatedAgent)		
 		}
 		
 		// Starting simulation

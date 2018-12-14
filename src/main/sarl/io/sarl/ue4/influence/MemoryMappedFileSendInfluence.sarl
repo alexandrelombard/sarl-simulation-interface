@@ -16,7 +16,7 @@ import java.nio.file.StandardOpenOption
  * 
  */
 skill MemoryMappedFileSendInfluence implements SendInfluence {
-
+	
 	/** The name of the memory mapped file (currently hard-coded) */
 	val fileName = "SHM_SARL_UE4"
 
@@ -42,7 +42,7 @@ skill MemoryMappedFileSendInfluence implements SendInfluence {
 	
 	def sendInfluence(force : Vector3D) {
 		// Serialization
-		val influence = new Influence(force, ID)
+		val influence = new Influence(ID, force, 0.0)
 		val buffer = influence.toByteArray
 		
 		// Sending packet

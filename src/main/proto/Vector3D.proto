@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package io.sarl.ue4;
+
+option java_package = "io.sarl.ue4.utils";
+option java_outer_classname = "Vector3DProtos";
+
+message Vector3D {
+  required float x = 1;
+  required float y = 2;
+  required float z = 3;
+}

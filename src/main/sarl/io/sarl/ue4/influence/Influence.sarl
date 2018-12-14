@@ -12,12 +12,23 @@ import java.nio.ByteBuffer
  * @author Alexandre Lombard
  */
 class Influence extends Object {
-	public val influence : Vector3D
 	public val id : UUID
+	public val influence : Vector3D
+	public val duration: Double
 	
-	new (influence: Vector3D, id: UUID) {
-		this.influence = influence
+	/**
+	 * Build an influence: an influence is a force in Newton (kg.m/s2). It's similar to an acceleration, except that the effect
+	 * of the mass will be applied by the simulation engine.
+	 * @param id the source of the influence (the ID of the agent)
+	 * @param influence the vector representing the influence on the world
+	 * @param duration the duration of the application of the force in seconds,
+	 * 				   a negative or null value means that the duration is indefinite,
+	 * 				   if a new influence is sent while another one was being applied, the previous one will be discarded
+	 */
+	new (id : UUID, influence : Vector3D, duration : Double) {
 		this.id = id
+		this.influence = influence
+		this.duration = duration
 	}
 	
 	/** Custom serialization */
