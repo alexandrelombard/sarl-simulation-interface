@@ -1,12 +1,16 @@
 /** 
  * 
  */
-package io.sarl.ue4.influence
+package io.sarl.ue4.influence.com
 
 import io.sarl.ue4.Vector3D
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+
+import io.sarl.ue4.influence.Influence
+import io.sarl.ue4.influence.ActionInfluence
+import io.sarl.ue4.influence.PhysicalInfluence
 
 /** 
  * Allows sending influences through UDP protocol.
@@ -27,19 +31,29 @@ skill UdpSendInfluence implements SendInfluence {
 	def uninstall {
 		//
 	}
-	
+
 	def sendInfluence(force : Vector3D) {
-		// Serialization
-		val influence = new Influence(ID, force, 0.0)
+		sendPhysicalInfluence(force, new Vector3D(), new Vector3D())
+	}
+
+	def sendPhysicalInfluence(force : Vector3D, forceLocation : Vector3D, angularForce : Vector3D) {
+		val influence = new PhysicalInfluence(ID, force, forceLocation, angularForce)
 		val buffer = influence.toByteArray
-		
-		// Sending packet
-		val packet = new DatagramPacket(buffer, buffer.length, ipAddress, port)
-		val socket = new DatagramSocket()
-		
-		socket.send(packet)
-		
-		socket.close
+
+		sendBuffer(buffer)
+	}
+
+	def sendActionInfluence(actionType : String, target : String, position : Vector3D) {
+		val influence = new ActionInfluence(ID, actionType, target, position)
+		val buffer = influence.toByteArray
+
+		sendBuffer(buffer)
 	}
 	
+	def sendBuffer(buffer : byte[]) {
+		val packet = new DatagramPacket(buffer, buffer.length, ipAddress, port)
+		val socket = new DatagramSocket()
+		socket.send(packet)
+		socket.close
+	}
 }

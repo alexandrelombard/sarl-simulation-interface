@@ -1,0 +1,24 @@
+package io.sarl.ue4
+
+import java.nio.ByteBuffer
+
+class SerializerExtensions {
+	static def putString(byteBuffer : ByteBuffer, str : String) {
+		byteBuffer.putInt(str.length + 1)
+		byteBuffer.put(str.bytes)
+	}
+	
+	static def putVector(byteBuffer : ByteBuffer, vector : Vector3D) {
+		byteBuffer.putFloat(vector.x.floatValue)
+		byteBuffer.putFloat(vector.y.floatValue)
+		byteBuffer.putFloat(vector.z.floatValue)
+	}
+	
+	static def sizeOfString(string: String) : int {
+		return 4 + string.length
+	}
+	
+	static def sizeOfVector() : int {
+		return 3 * 4; 
+	}
+}

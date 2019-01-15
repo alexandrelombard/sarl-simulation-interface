@@ -1,0 +1,52 @@
+package io.sarl.ue4.influence
+
+import io.sarl.ue4.Vector3D
+import java.util.UUID
+import java.nio.ByteBuffer
+
+import static extension io.sarl.ue4.SerializerExtensions.putString
+import static extension io.sarl.ue4.SerializerExtensions.putVector
+
+import static io.sarl.ue4.SerializerExtensions.sizeOfString
+import static io.sarl.ue4.SerializerExtensions.sizeOfVector
+
+/** 
+ * Represents an action of an agent on the world using its body (for instance "move", "grab", "open", etc.)
+ * The description of the action is mostly free and it's up to the simulation engine to handle correctly the 
+ * possible actions.
+ * @author Alexandre Lombard
+ */
+class ActionInfluence extends Influence {
+	
+	static val ACTION_INFLUENCE = "0201"
+	
+	public val actionType: String
+	public val target: String
+	public val position: Vector3D
+	
+	new(id: UUID, actionType: String, target: String, position: Vector3D) {
+		super(id)
+		this.actionType = actionType
+		this.target = target
+		this.position = position 
+	}
+	
+	def toByteArray() : byte[] {
+		val idStr = id.toString
+		val byteBuffer = ByteBuffer.allocate(
+			sizeOfString(ACTION_INFLUENCE) +
+			sizeOfString(idStr) +
+			sizeOfString(actionType) +
+			sizeOfString(target) +
+			sizeOfVector())
+
+		byteBuffer.putString(ACTION_INFLUENCE)
+		byteBuffer.putString(idStr)
+		byteBuffer.putString(actionType)
+		byteBuffer.putString(target)
+		byteBuffer.putVector(position)
+
+		return byteBuffer.array
+	}
+	
+}

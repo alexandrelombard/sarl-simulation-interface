@@ -4,11 +4,10 @@
 package io.sarl.ue4
 
 import io.sarl.core.Initialize
-import io.sarl.ue4.events.SimulationStep
-import io.sarl.ue4.influence.SendInfluence
-import io.sarl.ue4.influence.UdpSendInfluence
-import io.sarl.ue4.perception.PerceptionsReceived
 import io.sarl.core.Logging
+import io.sarl.ue4.influence.com.SendInfluence
+import io.sarl.ue4.influence.com.UdpSendInfluence
+import io.sarl.ue4.perception.PerceptionsReceived
 
 /** 
  * Agent able to send influences on the world

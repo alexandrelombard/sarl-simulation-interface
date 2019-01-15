@@ -1,16 +1,17 @@
 /** 
  * 
  */
-package io.sarl.ue4.influence
+package io.sarl.ue4.influence.com
 
 import io.sarl.ue4.Vector3D
+import io.sarl.ue4.influence.ActionInfluence
+import io.sarl.ue4.influence.PhysicalInfluence
 import java.net.InetAddress
 import java.net.Socket
 
 /** 
  * Allows sending influences through TCP protocol.
  * @author Alexandre Lombard
- * 
  */
 skill TcpSendInfluence implements SendInfluence {
 	
@@ -35,11 +36,22 @@ skill TcpSendInfluence implements SendInfluence {
 	}
 	
 	def sendInfluence(force : Vector3D) {
-		// Serialization
-		val influence = new Influence(ID, force, 0.0)
+		sendPhysicalInfluence(force, new Vector3D(), new Vector3D())
+	}
+	
+	def sendPhysicalInfluence(force: Vector3D, forceLocation: Vector3D, angularForce: Vector3D) {
+		val influence = new PhysicalInfluence(ID, force, forceLocation, angularForce)
 		val buffer = influence.toByteArray
 		
-		// Sending packet
+		synchronized(this) {
+			this.socket.outputStream.write(buffer)
+		}
+	}
+	
+	def sendActionInfluence(actionType: String, target: String, position: Vector3D) {
+		val influence = new ActionInfluence(ID, actionType, target, position)
+		val buffer = influence.toByteArray
+
 		synchronized (this) {
 			this.socket.outputStream.write(buffer)
 		}
