@@ -6,6 +6,7 @@ class SerializerExtensions {
 	static def putString(byteBuffer : ByteBuffer, str : String) {
 		byteBuffer.putInt(str.length + 1)
 		byteBuffer.put(str.bytes)
+		byteBuffer.put(0 as byte)
 	}
 	
 	static def putVector(byteBuffer : ByteBuffer, vector : Vector3D) {
@@ -15,10 +16,10 @@ class SerializerExtensions {
 	}
 	
 	static def sizeOfString(string: String) : int {
-		return 4 + string.length
+		return 4 + string.length + 1
 	}
 	
-	static def sizeOfVector() : int {
+	static def sizeOfVector() : int { 
 		return 3 * 4; 
 	}
 }

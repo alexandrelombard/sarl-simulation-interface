@@ -4,13 +4,11 @@
 package io.sarl.ue4.influence.com
 
 import io.sarl.ue4.Vector3D
+import io.sarl.ue4.influence.ActionInfluence
+import io.sarl.ue4.influence.PhysicalInfluence
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
-
-import io.sarl.ue4.influence.Influence
-import io.sarl.ue4.influence.ActionInfluence
-import io.sarl.ue4.influence.PhysicalInfluence
 
 /** 
  * Allows sending influences through UDP protocol.

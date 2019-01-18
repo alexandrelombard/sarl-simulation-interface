@@ -1,0 +1,34 @@
+package io.sarl.ue4.simulation
+
+import java.nio.ByteBuffer
+import static extension io.sarl.ue4.SerializerExtensions.putString
+import static extension io.sarl.ue4.SerializerExtensions.sizeOfString
+
+class SimulationControl {
+	static val SIMULATION_CONTROL = "0001" 
+	
+	val controlAction : ControlAction
+	val data: String
+	
+	new (controlAction: ControlAction, data: String) {
+		this.controlAction = controlAction
+		this.data = data
+	}
+	
+	def toByteArray(): byte[] {
+		val buffer = ByteBuffer.allocate(sizeOfString(SIMULATION_CONTROL) + 4 + sizeOfString(data))
+		buffer.putString(SIMULATION_CONTROL)
+		buffer.putInt(controlAction.ordinal())
+		buffer.putString(data)
+		
+		return buffer.array
+	}
+}
+
+enum ControlAction {
+	CreateBody,
+	SetSimulationParameter,
+	SimulationStart,
+	SimulationStep,
+	SimulationEnd
+}

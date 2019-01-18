@@ -9,6 +9,7 @@ import java.util.UUID
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.nio.ByteOrder
+import java.nio.BufferUnderflowException
 
 /** 
  * Represents a list of perceptions (i.e. a perception for a single body)
@@ -33,33 +34,40 @@ class PerceptionList extends Object {
 	 * @return the list of perceptions
 	 */
 	static def fromByteArray(b : byte[]) : PerceptionList {
-		val byteBuffer = ByteBuffer.wrap(b);
+		try {
+			val byteBuffer = ByteBuffer.wrap(b);
 
-		// FIXME Should not be there, but UE4 seems unable to serialize in Big Endian...
-		byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
+			// FIXME Should not be there, but UE4 seems unable to serialize in Big Endian...
+			byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
 
-		// Parse the ID
-		val idLength = byteBuffer.int
-		val idBuffer = newByteArrayOfSize(idLength)
-		byteBuffer.get(idBuffer)
+			// Parse the ID
+			val idLength = byteBuffer.int
+			val idBuffer = newByteArrayOfSize(idLength)
+			byteBuffer.get(idBuffer)
 
-		val idStr = new String(idBuffer).trim
-		val id = UUID.fromString(idStr)
+			val idStr = new String(idBuffer).trim
+			val id = UUID.fromString(idStr)
 
-		// Parse the perceptions
-		val perceptionsCount = byteBuffer.int
-		val perceptions = newArrayList
-		val floatBuffer = byteBuffer.asFloatBuffer
+			// Parse the perceptions
+			val perceptionsCount = byteBuffer.int
+			val perceptions = newArrayList
+			val floatBuffer = byteBuffer.asFloatBuffer
 
-		for (var i = 0; i < perceptionsCount; i++) {
-			val x = floatBuffer.get.doubleValue
-			val y = floatBuffer.get.doubleValue
-			val z = floatBuffer.get.doubleValue
+			for (var i = 0; i < perceptionsCount; i++) {
+				val x = floatBuffer.get.doubleValue
+				val y = floatBuffer.get.doubleValue
+				val z = floatBuffer.get.doubleValue
 
-			perceptions.add(new Vector3D(x, y, z))
+				perceptions.add(new Vector3D(x, y, z))
+			}
+
+			new PerceptionList(id, perceptions)
+		} catch (e: BufferUnderflowException) {
+			System.err.println(e.getMessage())
+
+			null
 		}
-
-		new PerceptionList(id, perceptions)
+		
 	}
 	
 }
