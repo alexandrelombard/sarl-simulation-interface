@@ -25,13 +25,6 @@ agent SimulatedAgent {
 		sendInfluence(direction)	// TODO Temporarily used (needed to trigger the spawn in UE4)
 	}
 	
-//	on SimulationStep {
-//		synchronized (direction) {
-//			// Send the influence
-//			sendInfluence(direction)
-//		}
-//	}
-	
 	on PerceptionsReceived {
 		if (occurrence.perceptionList.perceptions.size > 0) {
 			var to = new Vector3D(0.0, 0.0, 0.0)
@@ -46,10 +39,7 @@ agent SimulatedAgent {
 			//to = to * -1.0		// Invert
 			to = to * 10000.0		// Scale
 
-//			synchronized (this) {
-//				this.direction = to
-//			}
-			sendInfluence(to)	// TODO Temporarily used instead of the SimulationStep
+			sendInfluence(to)
 
 			info("New direction: " + to)	
 		}

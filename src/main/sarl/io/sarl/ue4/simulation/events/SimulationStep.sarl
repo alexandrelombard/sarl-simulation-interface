@@ -1,7 +1,7 @@
 /** 
  * 
  */
-package io.sarl.ue4.events
+package io.sarl.ue4.simulation.events
 
 /** 
  * Simulation step event

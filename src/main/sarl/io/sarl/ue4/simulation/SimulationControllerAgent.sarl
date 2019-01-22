@@ -1,0 +1,87 @@
+/** 
+ * 
+ */
+package io.sarl.ue4.simulation
+
+import io.sarl.core.AgentKilled
+import io.sarl.core.AgentSpawned
+import io.sarl.core.ContextJoined
+import io.sarl.core.ContextLeft
+import io.sarl.core.Destroy
+import io.sarl.core.Initialize
+import io.sarl.core.Logging
+import io.sarl.core.MemberJoined
+import io.sarl.core.MemberLeft
+import io.sarl.ue4.simulation.com.UdpSimulationControl
+import io.sarl.core.Lifecycle
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Schedules
+import io.sarl.ue4.simulation.events.SimulationStep
+import io.sarl.ue4.SimulatedAgent
+
+/** 
+ * Agent in charge of controlling the simulation
+ * @author Alexandre Lombard
+ * 
+ */
+agent SimulationControllerAgent {
+	uses Logging, Lifecycle, DefaultContextInteractions, Schedules
+	uses SimulationControlCapacity
+
+	val agentsCount = 500
+	val simulationPeriod = 200
+	
+	var totalSpawnedAgents = 0
+
+	on Initialize {
+		setSkill(new UdpSimulationControl, SimulationControlCapacity)
+
+		// Spawn the agents
+		for (var idx = 0; idx < agentsCount; idx++) {
+			spawn(SimulatedAgent)
+		}
+
+		// Schedules the simulation step events
+		every(simulationPeriod)[emit(new SimulationStep())]
+	}
+
+	on Destroy {
+		//
+	}
+
+	on AgentSpawned {
+		synchronized (this) {
+			if (occurrence.agentType == typeof(SimulatedAgent)) {
+				totalSpawnedAgents++
+				if(totalSpawnedAgents == agentsCount) {
+					simulationStart("")
+				}
+			}
+		}
+	}
+
+	on AgentKilled {
+		//
+	}
+
+	on ContextJoined {
+		//
+	}
+
+	on ContextLeft {
+		//
+	}
+
+	on MemberJoined {
+		//
+	}
+
+	on MemberLeft {
+		//
+	}
+
+	on SimulationStep {
+		simulationStep("")
+	}
+	
+}

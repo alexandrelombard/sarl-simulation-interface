@@ -1,0 +1,10 @@
+/** 
+ * 
+ */
+package io.sarl.ue4.simulation.events
+
+/** 
+ * @author Alexandre Lombard
+ * 
+ */
+event SimulationStart
