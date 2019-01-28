@@ -3,12 +3,11 @@
  */
 package io.sarl.ue4.perception
 
-import java.net.DatagramSocket
-import java.net.DatagramPacket
-import io.sarl.core.Schedules
 import io.sarl.core.AgentTask
+import io.sarl.core.Schedules
 import io.sarl.lang.core.Skill
-import io.sarl.core.Logging
+import java.net.DatagramPacket
+import java.net.DatagramSocket
 
 /** 
  * Allows an agent to receive the perceptions sent by UE4.
@@ -16,7 +15,9 @@ import io.sarl.core.Logging
  * 
  */
 skill UdpReceivePerceptions extends Skill implements ReceivePerceptions {
-	
+
+	val internalPerceptionsBufferSize = 4096
+
 	uses Schedules
 
 	val socket : DatagramSocket = new DatagramSocket(4243);
@@ -28,7 +29,7 @@ skill UdpReceivePerceptions extends Skill implements ReceivePerceptions {
 		// Start the task in charge of reading the incoming messages from UE4
 		synchronized (this) {
 			this.task = atFixedDelay(0) [
-				val buffer = newByteArrayOfSize(1024);
+				val buffer = newByteArrayOfSize(internalPerceptionsBufferSize);
 				val receivePacket = new DatagramPacket(buffer, buffer.length);
 
 				socket.receive(receivePacket);

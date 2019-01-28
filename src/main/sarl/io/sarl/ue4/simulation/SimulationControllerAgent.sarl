@@ -18,6 +18,7 @@ import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Schedules
 import io.sarl.ue4.simulation.events.SimulationStep
 import io.sarl.ue4.SimulatedAgent
+import io.sarl.ue4.influence.InfluenceEvent
 
 /** 
  * Agent in charge of controlling the simulation
@@ -28,13 +29,17 @@ agent SimulationControllerAgent {
 	uses Logging, Lifecycle, DefaultContextInteractions, Schedules
 	uses SimulationControlCapacity
 
-	val agentsCount = 500
+	val agentsCount = 50
 	val simulationPeriod = 200
 	
 	var totalSpawnedAgents = 0
+	
+	var currentInfluenceCount = 0
 
 	on Initialize {
 		setSkill(new UdpSimulationControl, SimulationControlCapacity)
+
+		info("Spawning simulated agents (" + agentsCount + ")...")
 
 		// Spawn the agents
 		for (var idx = 0; idx < agentsCount; idx++) {
@@ -42,21 +47,24 @@ agent SimulationControllerAgent {
 		}
 
 		// Schedules the simulation step events
-		every(simulationPeriod)[emit(new SimulationStep())]
+		//every(simulationPeriod)[emit(new SimulationStep())]
 	}
 
 	on Destroy {
 		//
 	}
 
-	on AgentSpawned {
-		synchronized (this) {
-			if (occurrence.agentType == typeof(SimulatedAgent)) {
-				totalSpawnedAgents++
-				if(totalSpawnedAgents == agentsCount) {
-					simulationStart("")
-				}
-			}
+	on AgentSpawned [typeof(SimulatedAgent).name == occurrence.agentType] {
+		info("Creating body for agent ("+ occurrence.agentID + ")")
+		
+		createBody(occurrence.agentID.toString)
+		
+		totalSpawnedAgents++
+		
+		if (totalSpawnedAgents == agentsCount) {
+			info("Agents spawned (" + agentsCount + ")")
+			simulationStart("")
+			executeSimulationStep()
 		}
 	}
 
@@ -79,9 +87,23 @@ agent SimulationControllerAgent {
 	on MemberLeft {
 		//
 	}
-
-	on SimulationStep {
-		simulationStep("")
+	
+	on InfluenceEvent {
+		synchronized (this) {
+			currentInfluenceCount++
+			if (currentInfluenceCount == agentsCount) {
+				executeSimulationStep()
+			}
+		}
 	}
 	
+	def executeSimulationStep() {
+		emit(new SimulationStep)
+		
+		simulationStep("")
+
+		info("Simulation step")
+		
+		currentInfluenceCount = 0
+	}
 }

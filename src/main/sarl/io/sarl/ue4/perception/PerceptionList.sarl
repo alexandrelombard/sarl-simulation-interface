@@ -38,7 +38,7 @@ class PerceptionList extends Object {
 			val byteBuffer = ByteBuffer.wrap(b);
 
 			// FIXME Should not be there, but UE4 seems unable to serialize in Big Endian...
-			byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
+			//byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
 
 			// Parse the ID
 			val idLength = byteBuffer.int

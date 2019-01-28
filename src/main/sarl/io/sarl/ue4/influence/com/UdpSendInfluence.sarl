@@ -16,6 +16,7 @@ import java.net.InetAddress
  * 
  */
 skill UdpSendInfluence implements SendInfluence {
+	
 	/** The IP address (currently hard-coded) */
 	val ipAddress = InetAddress.getByName("127.0.0.1")
 	
@@ -48,7 +49,7 @@ skill UdpSendInfluence implements SendInfluence {
 		sendBuffer(buffer)
 	}
 	
-	def sendBuffer(buffer : byte[]) {
+	def sendBuffer(buffer : byte[]) {		
 		val packet = new DatagramPacket(buffer, buffer.length, ipAddress, port)
 		val socket = new DatagramSocket()
 		socket.send(packet)
