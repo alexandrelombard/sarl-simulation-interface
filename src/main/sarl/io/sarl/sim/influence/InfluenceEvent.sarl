@@ -1,0 +1,11 @@
+/** 
+ * 
+ */
+package io.sarl.sim.influence
+
+/** 
+ * Event emitted when an influence is sent
+ * @author Alexandre Lombard
+ * 
+ */
+event InfluenceEvent

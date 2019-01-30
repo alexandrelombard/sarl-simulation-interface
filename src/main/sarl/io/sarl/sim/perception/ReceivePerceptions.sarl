@@ -1,0 +1,17 @@
+/** 
+ * 
+ */
+package io.sarl.sim.perception
+
+import io.sarl.lang.core.Capacity
+
+/** 
+ * Capacity to receive perceptions emitted by UE4
+ * @author Alexandre Lombard
+ * 
+ */
+capacity ReceivePerceptions extends Capacity {
+	
+	def setOnPerceptionsReceived(callback: (PerceptionList) => void);
+	
+}

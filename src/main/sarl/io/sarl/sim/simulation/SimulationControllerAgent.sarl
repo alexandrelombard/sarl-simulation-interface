@@ -1,0 +1,109 @@
+/** 
+ * 
+ */
+package io.sarl.sim.simulation
+
+import io.sarl.core.AgentKilled
+import io.sarl.core.AgentSpawned
+import io.sarl.core.ContextJoined
+import io.sarl.core.ContextLeft
+import io.sarl.core.Destroy
+import io.sarl.core.Initialize
+import io.sarl.core.Logging
+import io.sarl.core.MemberJoined
+import io.sarl.core.MemberLeft
+import io.sarl.sim.simulation.com.UdpSimulationControl
+import io.sarl.core.Lifecycle
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Schedules
+import io.sarl.sim.simulation.events.SimulationStep
+import io.sarl.sim.SimulatedAgent
+import io.sarl.sim.influence.InfluenceEvent
+
+/** 
+ * Agent in charge of controlling the simulation
+ * @author Alexandre Lombard
+ * 
+ */
+agent SimulationControllerAgent {
+	uses Logging, Lifecycle, DefaultContextInteractions, Schedules
+	uses SimulationControlCapacity
+
+	val agentsCount = 50
+	val simulationPeriod = 200
+	
+	var totalSpawnedAgents = 0
+	
+	var currentInfluenceCount = 0
+
+	on Initialize {
+		setSkill(new UdpSimulationControl, SimulationControlCapacity)
+
+		info("Spawning simulated agents (" + agentsCount + ")...")
+
+		// Spawn the agents
+		for (var idx = 0; idx < agentsCount; idx++) {
+			spawn(SimulatedAgent)
+		}
+
+		// Schedules the simulation step events
+		//every(simulationPeriod)[emit(new SimulationStep())]
+	}
+
+	on Destroy {
+		//
+	}
+
+	on AgentSpawned [typeof(SimulatedAgent).name == occurrence.agentType] {
+		info("Creating body for agent ("+ occurrence.agentID + ")")
+		
+		createBody(occurrence.agentID.toString)
+		
+		totalSpawnedAgents++
+		
+		if (totalSpawnedAgents == agentsCount) {
+			info("Agents spawned (" + agentsCount + ")")
+			simulationStart("")
+			executeSimulationStep()
+		}
+	}
+
+	on AgentKilled {
+		//
+	}
+
+	on ContextJoined {
+		//
+	}
+
+	on ContextLeft {
+		//
+	}
+
+	on MemberJoined {
+		//
+	}
+
+	on MemberLeft {
+		//
+	}
+	
+	on InfluenceEvent {
+		synchronized (this) {
+			currentInfluenceCount++
+			if (currentInfluenceCount == agentsCount) {
+				executeSimulationStep()
+			}
+		}
+	}
+	
+	def executeSimulationStep() {
+		emit(new SimulationStep)
+		
+		simulationStep("")
+
+		info("Simulation step")
+		
+		currentInfluenceCount = 0
+	}
+}

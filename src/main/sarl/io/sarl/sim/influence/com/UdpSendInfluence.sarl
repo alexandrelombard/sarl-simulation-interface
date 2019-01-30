@@ -1,0 +1,58 @@
+/** 
+ * 
+ */
+package io.sarl.sim.influence.com
+
+import io.sarl.sim.utils.Vector3D
+import io.sarl.sim.influence.ActionInfluence
+import io.sarl.sim.influence.PhysicalInfluence
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
+
+/** 
+ * Allows sending influences through UDP protocol.
+ * @author Alexandre Lombard
+ * 
+ */
+skill UdpSendInfluence implements SendInfluence {
+	
+	/** The IP address (currently hard-coded) */
+	val ipAddress = InetAddress.getByName("127.0.0.1")
+	
+	/** The UDP port (currently hard-coded) */
+	val port = 4242
+
+	def install {
+		//
+	}
+
+	def uninstall {
+		//
+	}
+
+	def sendInfluence(force : Vector3D) {
+		sendPhysicalInfluence(force, new Vector3D(), new Vector3D())
+	}
+
+	def sendPhysicalInfluence(force : Vector3D, forceLocation : Vector3D, angularForce : Vector3D) {
+		val influence = new PhysicalInfluence(ID, force, forceLocation, angularForce)
+		val buffer = influence.toByteArray
+
+		sendBuffer(buffer)
+	}
+
+	def sendActionInfluence(actionType : String, target : String, position : Vector3D) {
+		val influence = new ActionInfluence(ID, actionType, target, position)
+		val buffer = influence.toByteArray
+
+		sendBuffer(buffer)
+	}
+	
+	def sendBuffer(buffer : byte[]) {		
+		val packet = new DatagramPacket(buffer, buffer.length, ipAddress, port)
+		val socket = new DatagramSocket()
+		socket.send(packet)
+		socket.close
+	}
+}

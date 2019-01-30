@@ -1,0 +1,17 @@
+/** 
+ * 
+ */
+package io.sarl.sim.perception
+
+/** 
+ * Event containing the perceptions of an agent body
+ * @author Alexandre Lombard
+ * 
+ */
+event PerceptionsReceived {
+	val perceptionList: PerceptionList
+	
+	new (perceptionList: PerceptionList) {
+		this.perceptionList = perceptionList
+	}
+}

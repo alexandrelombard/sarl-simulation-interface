@@ -1,0 +1,28 @@
+/** 
+ * 
+ */
+package io.sarl.sim.perception
+
+import io.sarl.core.Initialize
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Logging
+
+/** 
+ * Receives the perceptions from UE4 and emit perception events to the agents
+ * @author Alexandre Lombard
+ * 
+ */
+agent PerceptionsDispatcher {
+	uses ReceivePerceptions, DefaultContextInteractions, Logging
+
+	on Initialize {
+		setSkill(new UdpReceivePerceptions, ReceivePerceptions)
+		
+		onPerceptionsReceived = [ dispatchPerceptions(it) ]
+	}
+	
+	def dispatchPerceptions(p: PerceptionList) : void {		
+		new PerceptionsReceived(p).emit [it.UUID == p.id]
+	}
+
+}

@@ -1,0 +1,61 @@
+/** 
+ * 
+ */
+package io.sarl.sim.perception
+
+import io.sarl.core.AgentTask
+import io.sarl.core.Schedules
+import io.sarl.lang.core.Skill
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+
+/** 
+ * Allows an agent to receive the perceptions sent by UE4.
+ * @author Alexandre Lombard
+ * 
+ */
+skill UdpReceivePerceptions extends Skill implements ReceivePerceptions {
+
+	val internalPerceptionsBufferSize = 4096
+
+	uses Schedules
+
+	val socket : DatagramSocket = new DatagramSocket(4243);
+	
+	var callback: (PerceptionList)=>void
+	var task: AgentTask = null
+	
+	def install {
+		// Start the task in charge of reading the incoming messages from UE4
+		synchronized (this) {
+			this.task = atFixedDelay(0) [
+				val buffer = newByteArrayOfSize(internalPerceptionsBufferSize);
+				val receivePacket = new DatagramPacket(buffer, buffer.length);
+
+				socket.receive(receivePacket);
+
+				val perceptions = PerceptionList.fromByteArray(buffer)
+
+				synchronized (this) {
+					callback.apply(perceptions)
+				}
+			]
+					
+		}
+	}
+
+	def uninstall {
+		synchronized(this) {
+			if(task !== null) {
+				task.cancel
+			}
+		}
+	}
+
+	def setOnPerceptionsReceived(callback : (PerceptionList)=>void) {
+		synchronized (this) {
+			this.callback = callback
+		}
+	}
+	
+}

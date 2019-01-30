@@ -1,0 +1,44 @@
+/** 
+ * 
+ */
+package io.sarl.sim.utils
+
+/** 
+ * Represents a quaternion
+ * @author Alexandre Lombard
+ * 
+ */
+class Quaternion extends Object {
+
+	public val w : Double
+	public val x : Double
+	public val y : Double
+	public val z : Double
+	
+	new() {
+		w = 1.0
+		x = 0.0
+		y = 0.0
+		z = 0.0
+	}
+	
+	new(w: Double, x: Double, y: Double, z: Double) {
+		this.w = w
+		this.x = x
+		this.y = y
+		this.z = z
+	}
+
+	def operator_multiply(q : Quaternion) : Quaternion {
+		return new Quaternion(
+			q.w * this.w - q.x * this.x - q.y * this.y - q.z * this.z,
+			q.w * this.x + q.x * this.w - q.y * this.z + q.z * this.y,
+			q.w * this.y + q.x * this.z + q.y * this.w - q.z * this.x,
+			q.w * this.z - q.x * this.y + q.y * this.x + q.z * this.w)
+	}
+	
+	override toString(): String {
+		return "[" + w + ", " + x + ", " + y + ", " + z + "]"
+	}
+	
+}

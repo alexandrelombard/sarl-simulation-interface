@@ -1,0 +1,68 @@
+/** 
+ * 
+ */
+package io.sarl.sim.influence.com
+
+import io.sarl.sim.utils.Vector3D
+import io.sarl.sim.influence.ActionInfluence
+import io.sarl.sim.influence.PhysicalInfluence
+import java.io.File
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
+import java.nio.channels.FileChannel.MapMode
+import java.nio.file.StandardOpenOption
+
+/** 
+ * Allows sending influences by pushing them in a shared memory segment (a memory mapped file).
+ * @author Alexandre Lombard
+ * 
+ */
+skill MemoryMappedFileSendInfluence implements SendInfluence {
+	
+	/** The name of the memory mapped file (currently hard-coded) */
+	val fileName = "SHM_SARL_UE4"
+
+	var channel: FileChannel = null
+	var mappedByteBuffer: MappedByteBuffer = null 
+
+	def install {
+		synchronized (this) {
+			channel = FileChannel.open(
+				new File(fileName).toPath,
+				StandardOpenOption.READ,
+				StandardOpenOption.WRITE,
+				StandardOpenOption.CREATE)
+			mappedByteBuffer = channel.map(MapMode.READ_WRITE, 0, 4096)		
+		}
+	}
+
+	def uninstall {
+		synchronized (this) {
+			channel.close
+		}
+	}
+
+	def sendInfluence(force : Vector3D) {
+		sendPhysicalInfluence(force, new Vector3D(), new Vector3D())
+	}
+
+	def sendPhysicalInfluence(force : Vector3D, forceLocation : Vector3D, angularForce : Vector3D) {
+		val influence = new PhysicalInfluence(ID, force, forceLocation, angularForce)
+		val buffer = influence.toByteArray
+
+		// Sending packet
+		synchronized (this) {
+			mappedByteBuffer.put(buffer)
+		}
+	}
+
+	def sendActionInfluence(actionType : String, target : String, position : Vector3D) {
+		val influence = new ActionInfluence(ID, actionType, target, position)
+		val buffer = influence.toByteArray
+
+		// Sending packet
+		synchronized (this) {
+			mappedByteBuffer.put(buffer)
+		}
+	}
+}

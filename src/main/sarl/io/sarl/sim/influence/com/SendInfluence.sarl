@@ -1,0 +1,18 @@
+/** 
+ * 
+ */
+package io.sarl.sim.influence.com
+
+import io.sarl.sim.utils.Vector3D
+import io.sarl.lang.core.Capacity
+
+/** 
+ * Capacity to send influences to the world
+ * @author Alexandre Lombard
+ * 
+ */
+capacity SendInfluence extends Capacity {
+	def sendInfluence(force : Vector3D)
+	def sendPhysicalInfluence(force : Vector3D, forceLocation : Vector3D, angularForce : Vector3D)
+	def sendActionInfluence(actionType : String, target : String, position: Vector3D)
+}

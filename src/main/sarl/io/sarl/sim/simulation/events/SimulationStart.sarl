@@ -1,0 +1,10 @@
+/** 
+ * 
+ */
+package io.sarl.sim.simulation.events
+
+/** 
+ * @author Alexandre Lombard
+ * 
+ */
+event SimulationStart

@@ -1,0 +1,50 @@
+/** 
+ * 
+ */
+package io.sarl.sim.perception
+
+import io.sarl.sim.utils.Quaternion
+import io.sarl.sim.utils.Vector3D
+import org.eclipse.xtend.lib.annotations.Accessors
+
+/** 
+ * Represents a perception of something by an agent
+ * @author Alexandre Lombard
+ * 
+ */
+class VisualPerception extends Object {
+	
+	/** A string conveying the semantic of the perceived object */
+	@Accessors(PUBLIC_GETTER)
+	val identifier: String
+	
+	/** The relative position of the perceived object
+	 */
+	@Accessors(PUBLIC_GETTER)
+	val position: Vector3D
+	
+	/** The relative velocity of the perceived object
+	 */
+	@Accessors(PUBLIC_GETTER)
+	val velocity: Vector3D
+	
+	/** The relative local space or rotation of the perceived object
+	 */
+	@Accessors(PUBLIC_GETTER)
+	val rotation: Quaternion
+	
+	/**
+	 * Builds a new perception object
+	 * @param identifier a string conveying the semantic of the perceived object
+	 * @param position the relative position of the perceived object
+	 * @param velocity the relative velocity of the perceived object
+	 * @param rotatio the relative local space or rotation of the perceived object
+	 */
+	new(identifier: String, position: Vector3D, velocity: Vector3D, rotation: Quaternion) {
+		this.identifier = identifier
+		this.position = position
+		this.velocity = velocity
+		this.rotation = rotation
+	}
+	
+}

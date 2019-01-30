@@ -1,0 +1,27 @@
+/** 
+ * 
+ */
+package io.sarl.sim.influence
+
+import java.util.UUID
+
+/** 
+ * Represents an influence (action on the world)
+ * @author Alexandre Lombard
+ */
+abstract class Influence extends Object {
+	public val id : UUID
+	
+	/**
+	 * Build an influence: an influence is a force in Newton (kg.m/s2). It's similar to an acceleration, except that the effect
+	 * of the mass will be applied by the simulation engine.
+	 * @param id the source of the influence (the ID of the agent)
+	 */
+	new (id : UUID) {
+		this.id = id
+	}
+	
+	/** Custom serialization */
+	abstract def toByteArray() : byte[]
+	
+}
